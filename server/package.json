@@ -19,8 +19,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "node app.js",
-    "dev": "nodemon app.js"
+    "start": "node app.ts"
   },
   "engines": {
     "node": ">=14.20.1"
