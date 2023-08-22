@@ -16,8 +16,7 @@ import postRoutes from "./routes/post.js";
 import { verifyToken } from "./middleware/auth.js";
 
 // CONFIGURATIONS
-const __fileName = fileURLToPath(import.meta.url);
-const __dirName = path.dirname(__fileName);
+const __dirName = "https://bamboo-social-network.onrender.com";
 dotenv.config();
 const app = express();
 app.use(express.json());
