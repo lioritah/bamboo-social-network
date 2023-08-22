@@ -6,8 +6,6 @@ import multer from "multer";
 import dotenv from "dotenv";
 import helmet from "helmet";
 import morgan from "morgan";
-import path from "path";
-import { fileURLToPath } from "url";
 import { register } from "./controllers/auth.js";
 import { createPost } from "./controllers/posts.js";
 import authRoutes from "./routes/auth.js";
@@ -16,7 +14,7 @@ import postRoutes from "./routes/post.js";
 import { verifyToken } from "./middleware/auth.js";
 
 // CONFIGURATIONS
-const __dirName = "https://bamboo-social-network.onrender.com";
+
 dotenv.config();
 const app = express();
 app.use(express.json());
@@ -26,7 +24,10 @@ app.use(morgan("common"));
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.use(cors());
-app.use("/assets", express.static(path.join(__dirName, "public/assets")));
+app.use(
+  "/assets",
+  express.static("https://bamboo-social-network.onrender.com/assets")
+);
 
 // FILE STORAGE
 const storage = multer.diskStorage({
