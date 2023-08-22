@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:3001";
+const API_URL = "https://bamboo-social-network.onrender.com";
 
 export const loginUser = async (values) => {
   try {
@@ -118,13 +118,10 @@ export const getPostsServer = async (token) => {
 };
 export const getUserPostsServer = async (userId, token) => {
   try {
-    const response = await fetch(
-      `http://localhost:3001/posts/${userId}/posts`,
-      {
-        method: "GET",
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    );
+    const response = await fetch(`${API_URL}/posts/${userId}/posts`, {
+      method: "GET",
+      headers: { Authorization: `Bearer ${token}` },
+    });
     if (!response.ok) {
       throw new Error("Failed to fetch get posts");
     }
@@ -136,7 +133,7 @@ export const getUserPostsServer = async (userId, token) => {
 };
 export const handleDeletePostServer = async (postId, token) => {
   try {
-    const response = await fetch(`http://localhost:3001/posts/${postId}`, {
+    const response = await fetch(`${API_URL}/posts/${postId}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -154,13 +151,10 @@ export const handleDeletePostServer = async (postId, token) => {
 
 export const fetchCommentsServer = async (postId, token) => {
   try {
-    const response = await fetch(
-      `http://localhost:3001/posts/${postId}/comment`,
-      {
-        method: "GET",
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    );
+    const response = await fetch(`${API_URL}/posts/${postId}/comment`, {
+      method: "GET",
+      headers: { Authorization: `Bearer ${token}` },
+    });
     if (!response.ok) {
       throw new Error("Failed to fetch get comment");
     }
@@ -173,7 +167,7 @@ export const fetchCommentsServer = async (postId, token) => {
 export const handleDeleteCommentServer = async (postId, commentId, token) => {
   try {
     const response = await fetch(
-      `http://localhost:3001/posts/${postId}/comment/${commentId}`,
+      `${API_URL}/posts/${postId}/comment/${commentId}`,
       {
         method: "DELETE",
         headers: {
@@ -192,7 +186,7 @@ export const handleDeleteCommentServer = async (postId, commentId, token) => {
 };
 export const patchLikeServer = async (postId, token, loggedInUserId) => {
   try {
-    const response = await fetch(`http://localhost:3001/posts/${postId}/like`, {
+    const response = await fetch(`${API_URL}/posts/${postId}/like`, {
       method: "PATCH",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -214,17 +208,14 @@ export const addCommentServer = async (
   commentText
 ) => {
   try {
-    const response = await fetch(
-      `http://localhost:3001/posts/${postId}/comment`,
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ userId: loggedInUserId, comment: commentText }),
-      }
-    );
+    const response = await fetch(`${API_URL}/posts/${postId}/comment`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ userId: loggedInUserId, comment: commentText }),
+    });
     return response;
   } catch (error) {
     console.error(error);
