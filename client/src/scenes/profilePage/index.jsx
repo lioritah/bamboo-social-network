@@ -1,4 +1,4 @@
-import { Box, useMediaQuery } from "@mui/material";
+import { Box, Typography, useMediaQuery } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -62,6 +62,14 @@ const ProfilePage = () => {
           <PostsWidget userId={userId} isProfile />
         </Box>
       </Box>
+      <Typography
+        textAlign="center"
+        fontWeight="500"
+        variant="h5"
+        sx={{ mb: "1.5rem" }}
+      >
+        © Lior Itah, All rights reserved.
+      </Typography>
     </Box>
   );
 };
