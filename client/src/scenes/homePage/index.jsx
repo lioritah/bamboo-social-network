@@ -1,4 +1,4 @@
-import { Box, useMediaQuery } from "@mui/material";
+import { Box, Typography, useMediaQuery } from "@mui/material";
 import { useSelector } from "react-redux";
 import Navbar from "scenes/navbar";
 import UserWidget from "scenes/widgets/UserWidget";
@@ -45,6 +45,14 @@ const HomePage = () => {
           </Box>
         )}
       </Box>
+      <Typography
+        textAlign="center"
+        fontWeight="500"
+        variant="h5"
+        sx={{ mb: "1.5rem" }}
+      >
+        © Lior Itah, All rights reserved.
+      </Typography>
     </Box>
   );
 };
