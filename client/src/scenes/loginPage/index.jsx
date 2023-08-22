@@ -29,6 +29,14 @@ const LoginPage = () => {
         </Typography>
         <Form />
       </Box>
+      <Typography
+        textAlign="center"
+        fontWeight="500"
+        variant="h5"
+        sx={{ mb: "1.5rem" }}
+      >
+        © Lior Itah, All rights reserved.
+      </Typography>
     </Box>
   );
 };
