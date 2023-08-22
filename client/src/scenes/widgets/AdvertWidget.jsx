@@ -20,7 +20,7 @@ const AdvertWidget = () => {
         width="100%"
         height="auto"
         alt="advert"
-        src="http://localhost:3001/assets/netflix_macos_bigsur_icon_189917.png"
+        src="https://bamboo-social-network.onrender.com/assets/netflix_macos_bigsur_icon_189917.png"
         style={{ borderRadius: "0.75rem", margin: "0.75rem 0" }}
       />
       <FlexBetween>
