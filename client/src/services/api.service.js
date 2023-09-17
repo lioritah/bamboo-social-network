@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:3001"; //"https://bamboo-social-network.onrender.com";
+const API_URL = "https://bamboo-social-network.onrender.com";
 
 export const loginUser = async (values) => {
   try {
