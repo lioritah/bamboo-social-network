@@ -1,4 +1,4 @@
-const API_URL = "https://bamboo-social-network.onrender.com";
+const API_URL = "http://localhost:3001"; //"https://bamboo-social-network.onrender.com";
 
 export const loginUser = async (values) => {
   try {
@@ -51,10 +51,11 @@ export const getUserServer = async (userId, token) => {
 
 export const getFriendsServer = async (userId, token) => {
   try {
-    return await fetch(`${API_URL}/users/${userId}/friends`, {
+    const friends = await fetch(`${API_URL}/users/${userId}/friends`, {
       method: "GET",
       headers: { Authorization: `Bearer ${token}` },
-    });
+    }).then((response) => response.json());
+    return friends;
   } catch (error) {
     console.error(error);
     throw error;
@@ -67,12 +68,12 @@ export const patchFriendServer = async (_id, friendId, token) => {
       method: "PATCH",
       headers: {
         Authorization: `Bearer ${token}`,
-
         "Content-Type": "application/json",
       },
-    });
+    }).then((res) => res.json());
     return response;
   } catch (error) {
+    alert(error);
     console.error("Error during login:", error);
     throw error;
   }
