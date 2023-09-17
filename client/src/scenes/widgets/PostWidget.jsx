@@ -133,10 +133,10 @@ const PostWidget = ({
           <Friend
             friendId={postUserId}
             name={name}
+            showAddButton={false}
             subtitle={location}
             userPicturePath={userPicturePath}
           />
-
           <IconButton
             onClick={() => handleDeletePost(postId)} // Attach handleDeleteComment to the button click
           >
@@ -148,6 +148,7 @@ const PostWidget = ({
           <Friend
             friendId={postUserId}
             name={name}
+            showAddButton={true}
             subtitle={location}
             userPicturePath={userPicturePath}
           />
