@@ -2,17 +2,27 @@
 import { PersonAddOutlined, PersonRemoveOutlined } from "@mui/icons-material";
 import { Box, IconButton, Typography, useTheme } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import FlexBetween from "./FlexBetween";
 import UserImage from "./UserImage";
-import { setFriends } from "state";
+import { patchFriendsBi, setFriends } from "state";
 import { patchFriendServer } from "services/api.service";
+import { useMemo } from "react";
 
-const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
+const Friend = ({
+  friendId,
+  name,
+  subtitle,
+  userPicturePath,
+  showAddButton = true,
+}) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { _id, friends } = useSelector((state) => state.user);
+
+  const { _id } = useSelector((state) => state.user);
   const token = useSelector((state) => state.token);
+
+  const friends = useSelector((state) => state.friendsByUserId);
 
   const { palette } = useTheme();
   const primaryLight = palette.primary.light;
@@ -20,17 +30,29 @@ const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
   const main = palette.neutral.main;
   const medium = palette.neutral.medium;
 
-  const isFriend = friends.find((friend) => friend._id === friendId);
+  const isFriend = useMemo(
+    () => friends[friendId]?.find((friend) => friend._id === _id),
+    [friendId, friends, _id]
+  );
 
   const patchFriend = async () => {
     if (_id !== friendId) {
-      const response = await patchFriendServer(_id, friendId, token);
-      const friendData = await response.json();
-      dispatch(setFriends({ friends: friendData })); // Update the friends list for the currently viewed profile user
+      const { userFriends, friendsOtherUser } = await patchFriendServer(
+        friendId,
+        _id,
+        token
+      );
 
+      dispatch(
+        patchFriendsBi({
+          userId: _id,
+          friendId,
+          userFriends: friendsOtherUser,
+          friendsOtherUser: userFriends,
+        })
+      );
       return;
     }
-    alert("Error");
   };
 
   return (
@@ -62,7 +84,7 @@ const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
         </Box>
       </FlexBetween>
 
-      {_id !== friendId ? (
+      {showAddButton && (
         <IconButton
           onClick={() => patchFriend()}
           sx={{ backgroundColor: primaryLight, p: "0.6rem" }}
@@ -73,8 +95,6 @@ const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
             <PersonAddOutlined sx={{ color: primaryDark }} />
           )}
         </IconButton>
-      ) : (
-        <></>
       )}
     </FlexBetween>
   );
