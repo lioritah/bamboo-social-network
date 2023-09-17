@@ -3,26 +3,19 @@ import Friend from "components/Friend";
 import WidgetWrapper from "components/WidgetWrapper";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getFriendsServer } from "services/api.service";
-import { setFriends } from "state";
+import { getFriendsByUserId } from "state";
 
 const FriendListWidget = ({ userId }) => {
   const dispatch = useDispatch();
   const { palette } = useTheme();
   const token = useSelector((state) => state.token);
-  const friends = useSelector((state) => state.user.friends);
+  const friends = useSelector((state) => state.friendsByUserId);
 
-  const getFriends = async () => {
-    const response = await getFriendsServer(userId, token);
-
-    const friendsData = await response.json();
-    dispatch(setFriends({ friends: friendsData })); // Dispatch the action to update profileUser.friends
-  };
+  const loggedInUserId = useSelector((state) => state.user._id);
 
   useEffect(() => {
-    getFriends();
+    dispatch(getFriendsByUserId(userId));
   }, [userId, token]); // eslint-disable-line react-hooks/exhaustive-deps
-
   return (
     <WidgetWrapper>
       <Typography
@@ -31,14 +24,15 @@ const FriendListWidget = ({ userId }) => {
         fontWeight="500"
         sx={{ mb: "1.5rem" }}
       >
-        My Friend List
+        Friend List
       </Typography>
       <Box display="flex" flexDirection="column" gap="1.5rem">
-        {friends?.length > 0 ? (
-          friends.map((friend) => (
+        {friends[userId]?.length > 0 ? (
+          friends[userId].map((friend) => (
             <Friend
               key={friend._id}
               friendId={friend._id}
+              showAddButton={userId === loggedInUserId}
               name={`${friend.firstName} ${friend.lastName}`}
               subtitle={friend.occupation}
               userPicturePath={friend.picturePath}
