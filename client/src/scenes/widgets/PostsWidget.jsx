@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setPosts } from "state";
+import { getFriendsByUserId, setPosts } from "state";
 import PostWidget from "./PostWidget";
 import { getPostsServer, getUserPostsServer } from "services/api.service";
 
@@ -36,6 +36,7 @@ const PostsWidget = ({ userId, isProfile = false }) => {
     } else {
       getPosts();
     }
+    dispatch(getFriendsByUserId(userId));
   }, [token, userId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
