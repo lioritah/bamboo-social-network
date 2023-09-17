@@ -8,10 +8,11 @@ import { Box, Typography, Divider, useTheme } from "@mui/material";
 import UserImage from "components/UserImage";
 import FlexBetween from "components/FlexBetween";
 import WidgetWrapper from "components/WidgetWrapper";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getUserServer } from "services/api.service";
+import { getFriendsByUserId } from "state";
 
 const UserWidget = ({ userId, picturePath }) => {
   const [user, setUser] = useState(null);
@@ -21,8 +22,8 @@ const UserWidget = ({ userId, picturePath }) => {
   const dark = palette.neutral.dark;
   const medium = palette.neutral.medium;
   const main = palette.neutral.main;
-  const friendsArray = useSelector((state) => state.user.friends);
-
+  const friendsArray = useSelector((state) => state.friendsByUserId);
+  const dispatch = useDispatch();
   const getUser = async () => {
     const response = await getUserServer(userId, token);
     const data = await response.json();
@@ -31,6 +32,7 @@ const UserWidget = ({ userId, picturePath }) => {
 
   useEffect(() => {
     getUser();
+    dispatch(getFriendsByUserId(userId));
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!user) {
@@ -71,7 +73,7 @@ const UserWidget = ({ userId, picturePath }) => {
               {firstName} {lastName}
             </Typography>
             <Typography color={medium}>
-              {friendsArray.length} friends
+              {friendsArray[userId]?.length ?? 0} friends
             </Typography>
           </Box>
         </FlexBetween>
