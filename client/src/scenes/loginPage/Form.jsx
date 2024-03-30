@@ -7,6 +7,7 @@ import {
   Typography,
   useTheme,
   Alert,
+  CircularProgress,
 } from "@mui/material";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { Formik } from "formik";
@@ -53,6 +54,7 @@ const Form = () => {
   const { palette } = useTheme();
   const [loginError, setLoginError] = useState(null); // State to store login error message
   const [registerError, setRegisterError] = useState(null); // State to store login error message
+  const [loading, setLoading] = useState(false); // State to indicate loading state
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -61,6 +63,8 @@ const Form = () => {
   const isRegister = pageType === "register";
 
   const register = async (values, onSubmitProps) => {
+    setLoading(true); // Set loading to true when registering
+
     try {
       const registerResponse = await registerUser(values);
       if (registerResponse.ok) {
@@ -80,9 +84,13 @@ const Form = () => {
     } catch (error) {
       console.error("Register error:", error);
       setRegisterError("An error with the register."); // Set the login error message
+    } finally {
+      setLoading(false); // Set loading back to false when registration is finished
     }
   };
   const login = async (values, onSubmitProps) => {
+    setLoading(true); // Set loading to true when logging in
+
     try {
       const loggedInResponse = await loginUser(values);
       if (loggedInResponse.ok) {
@@ -108,6 +116,8 @@ const Form = () => {
     } catch (error) {
       console.error("Login error:", error);
       setLoginError("An error occurred while logging in."); // Set the login error message
+    } finally {
+      setLoading(false); // Set loading back to false when login is finished
     }
   };
 
@@ -247,10 +257,13 @@ const Form = () => {
           </Box>
 
           {/* BUTTONS */}
-          <Box>
+          <Box position="relative">
+            {" "}
+            {/* Wrap the loader inside a relative positioned box */}
             <Button
               fullWidth
               type="submit"
+              disabled={loading} // Disable button when loading
               sx={{
                 m: "2rem 0",
                 p: "1rem",
@@ -261,6 +274,18 @@ const Form = () => {
             >
               {isLogin ? "LOGIN" : "REGISTER"}
             </Button>
+            {loading && ( // Show loader when loading is true
+              <Box textAlign={"center"}>
+                Loading ...{" "}
+                <CircularProgress
+                  size={20}
+                  sx={{
+                    position: "absolute",
+                    color: palette.primary.main,
+                  }}
+                />
+              </Box>
+            )}
             {isLogin ? (
               <> {loginError && <Alert severity="error">{loginError}</Alert>}</>
             ) : (
@@ -270,12 +295,9 @@ const Form = () => {
                 )}
               </>
             )}
-
             <Typography
               onClick={() => {
                 setPageType(isLogin ? "register" : "login");
-                console.log("Page Type:", pageType); // Add this line
-
                 resetForm();
               }}
               sx={{
